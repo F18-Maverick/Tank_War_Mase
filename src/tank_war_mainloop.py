@@ -6,7 +6,6 @@ class main_loop:
         self.Windows=windows()
         self.mase=Mase(self.Windows.black_canves)
         self.owntank=ownside_tank_function(self.Windows.black_canves)
-        self.tank_img=self.owntank.tank_ownside_func()
         self.MainLoop=self.Windows.window.mainloop()
 
 
