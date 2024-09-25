@@ -5,7 +5,7 @@ class main_loop:
     def __init__(self):
         self.Windows=windows()
         self.mase=Mase(self.Windows.black_canves)
-        self.owntank=ownside_tank_function(self.Windows.black_canves)
+        self.owntank=ownside_tank_function(self.Windows.black_canves, self.Windows.window)
         self.MainLoop=self.Windows.window.mainloop()
 
 
