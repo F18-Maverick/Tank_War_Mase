@@ -1,22 +1,26 @@
 import math
 from PIL import Image, ImageTk
 class Bullets:
-    def __init__(self, canvas, windows, mousex, mousey, tankx, tanky):
+    def __init__(self, canvas, windows, tank_img):
+        self.mouse_x=0
+        self.mouse_y=0
         self.root=windows
-        self.tank_x=tankx
-        self.tank_y=tanky
-        self.mouse_x=mousex
-        self.mouse_y=mousey
+        self.tank_image=tank_img
         self.black_canvas = canvas
         self.bullet_image=Image.open(r".\img\bullet.png")
         self.resize_img=self.bullet_image.resize((18, 6))
         self.image_to_tkinter = ImageTk.PhotoImage(self.resize_img)
         self.bullets_go=self.black_canvas.bind("<Button-1>", self.BulletsGo)
     def BulletsGo(self, event):
-        self.bullet_turn=self.control_bullet
+        self.mouse_x=event.x
+        self.mouse_y=event.y
+        self.bullet_turn=self.control_bullet()
     def on_mouse_move(self):
+        self.tank_position=self.black_canvas.coords(self.tank_image)
+        self.tank_x=self.tank_position[0]
+        self.tank_y=self.tank_position[1]
         self.image_display = self.black_canvas.create_image(
-            self.tank_x+9, self.tank_y+3, image=self.image_to_tkinter)
+            self.tank_x, self.tank_y, image=self.image_to_tkinter)
         self.img_position = self.black_canvas.coords(self.image_display)
         self.image_center_x = self.img_position[0]
         self.image_center_y = self.img_position[1]
