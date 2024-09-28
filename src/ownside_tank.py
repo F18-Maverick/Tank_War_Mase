@@ -2,6 +2,11 @@ import math
 from PIL import Image, ImageTk
 class ownside_tank_function():
     def __init__(self, canvas, windows):
+        self.mouse_x=0
+        self.mouse_y=0
+        self.step_size=1
+        self.image_center_x=0
+        self.image_center_y=0
         self.root=windows
         self.black_canvas=canvas
         self.image_to_tkinter=None
@@ -11,9 +16,6 @@ class ownside_tank_function():
         self.image_to_tkinter = ImageTk.PhotoImage(self.resize_image)
         self.image_display = self.black_canvas.create_image(42, 30, image=self.image_to_tkinter)
         self.mouse_go=self.black_canvas.bind("<Motion>", self.on_mouse_move)
-        self.mouse_x=0
-        self.mouse_y=0
-        self.step_size=1
         self.tank_moving=self.root.bind("<w>", self.control_moving)
     def on_mouse_move(self, event):
         self.mouse_x = event.x
@@ -48,9 +50,8 @@ class ownside_tank_function():
 
 
 
-r"""
-     
-"""
+
+
 
 
 
