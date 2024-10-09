@@ -18,6 +18,7 @@ class Bullets:
     def BulletsGo(self, event):
         self.mouse_x=event.x
         self.mouse_y=event.y
+
         self.bullet_display = self.black_canvas.create_image(
             self.image_center_x, self.image_center_y, image=self.image_to_tkinter)
         self.bullet_turn=self.control_bullet()
@@ -62,7 +63,13 @@ class Bullets:
     def control_bullet(self):
         self.on_mouse_move()
         self.bullet_move()
-        self.update=self.root.after(1000, self.control_bullet)
+
+
+
+
+
+
+
 
 
 
