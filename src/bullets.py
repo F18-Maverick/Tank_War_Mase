@@ -42,17 +42,34 @@ class Bullets:
         self.image_tk = ImageTk.PhotoImage(self.rotated_image)
         self.black_canvas.itemconfig(self.bullet_display, image=self.image_tk)
     def bullet_move(self):
+        self.x_less=0
+        self.x_add=0
+        self.y_less=0
+        self.y_add=0
         if self.time==0:
             return
-        print(self.time, "\t...", self.x_move_step, "\t...", self.y_move_step)
         if self.mouse_x <= self.image_center_x:
             self.image_center_x -= self.x_move_step
+            self.x_less+=1
         elif self.mouse_x >= self.image_center_x:
             self.image_center_x += self.x_move_step
+            self.x_add+=1
         if self.mouse_y <= self.image_center_y:
             self.image_center_y -= self.y_move_step
+            self.y_less+=1
         elif self.mouse_y >= self.image_center_y:
             self.image_center_y += self.y_move_step
+            self.y_add+=1
+        if self.mouse_x==round(self.image_center_x):
+            if self.x_less!=0:
+                self.image_center_x+=self.x_move_step
+            if self.x_add!=0:
+                self.image_center_x-=self.x_move_step
+        if self.mouse_y==round(self.image_center_y):
+            if self.y_less!=0:
+                self.image_center_y+=self.y_move_step
+            if self.y_add!=0:
+                self.image_center_y-=self.y_move_step
         self.move_img = self.black_canvas.coords(
             self.bullet_display, self.image_center_x, self.image_center_y)
         self.update = self.root.after(
@@ -73,3 +90,22 @@ class Bullets:
     def control_bullet(self):
         self.on_mouse_move()
         self.bullet_move()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
