@@ -3,9 +3,12 @@ from PIL import Image, ImageTk
 class Bullets:
     def __init__(self, canvas, windows, tank_img):
         self.bullets=[]
+        self.time=0
         self.mouse_x=0
         self.mouse_y=0
         self.root=windows
+        self.x_move_step=0
+        self.y_move_step=0
         self.act_step_size=2
         self.image_center_x=0
         self.image_center_y=0
@@ -24,6 +27,9 @@ class Bullets:
         self.image_center_y = self.img_position[1]
         self.bullet_display = self.black_canvas.create_image(
             self.image_center_x, self.image_center_y, image=self.image_to_tkinter)
+        self.time = self.move_time()
+        self.x_move_step=self.x_move()
+        self.y_move_step=self.y_move()
         self.bullet_turn=self.control_bullet()
     def on_mouse_move(self):
         self.delta_x = self.mouse_x - self.image_center_x
@@ -36,21 +42,21 @@ class Bullets:
         self.image_tk = ImageTk.PhotoImage(self.rotated_image)
         self.black_canvas.itemconfig(self.bullet_display, image=self.image_tk)
     def bullet_move(self):
-        self.time=self.move_time()
-        if self.time <= 0:
+        if self.time==0:
             return
-        self.x_move_step=float(self.buttom_length/self.time)
-        self.y_move_step=float(self.straight_length/self.time)
         print(self.time, "\t...", self.x_move_step, "\t...", self.y_move_step)
-        if self.mouse_x < self.image_center_x:
+        if self.mouse_x <= self.image_center_x:
             self.image_center_x -= self.x_move_step
-        elif self.mouse_x > self.image_center_x:
+        elif self.mouse_x >= self.image_center_x:
             self.image_center_x += self.x_move_step
-        if self.mouse_y < self.image_center_y:
+        if self.mouse_y <= self.image_center_y:
             self.image_center_y -= self.y_move_step
-        elif self.mouse_y > self.image_center_y:
+        elif self.mouse_y >= self.image_center_y:
             self.image_center_y += self.y_move_step
-        self.move_img = self.black_canvas.coords(self.bullet_display, self.image_center_x, self.image_center_y)
+        self.move_img = self.black_canvas.coords(
+            self.bullet_display, self.image_center_x, self.image_center_y)
+        self.update = self.root.after(
+            30, self.control_bullet)
     def move_time(self):
         self.buttom_length=abs(self.image_center_x-self.mouse_x)
         self.straight_length=abs(self.image_center_y-self.mouse_y)
@@ -58,24 +64,12 @@ class Bullets:
         self.bevel_edge_length=int(pow(self.power, 0.5))
         self.time=int(self.bevel_edge_length/self.act_step_size)
         return self.time
+    def x_move(self):
+        self.x_move_step=float(self.buttom_length/self.time)
+        return self.x_move_step
+    def y_move(self):
+        self.y_move_step=float(self.straight_length/self.time)
+        return self.y_move_step
     def control_bullet(self):
         self.on_mouse_move()
         self.bullet_move()
-        self.update = self.root.after(
-            30, self.control_bullet)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
