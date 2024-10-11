@@ -27,6 +27,7 @@ class Bullets:
         self.image_center_y = self.img_position[1]
         self.bullet_display = self.black_canvas.create_image(
             self.image_center_x, self.image_center_y, image=self.image_to_tkinter)
+        self.bullets.append(self.bullet_display)
         self.time = self.move_time()
         self.x_move_step=self.x_move()
         self.y_move_step=self.y_move()
@@ -34,46 +35,38 @@ class Bullets:
     def on_mouse_move(self):
         self.delta_x = self.mouse_x - self.image_center_x
         self.delta_y = self.mouse_y - self.image_center_y
+        # if int(self.delta_x)>=0:
+        #     self.image_center_x+=self.x_move_step
+        print(self.delta_x, "!!!", self.delta_y)
+    def rotate(self):
         self.angle = math.degrees(math.atan2(self.delta_y, self.delta_x))
-        print(self.angle)
         self.update_image_rotation(self.angle)
     def update_image_rotation(self, angle):
         self.rotated_image = self.resize_img.rotate(-angle, expand=True)
         self.image_tk = ImageTk.PhotoImage(self.rotated_image)
         self.black_canvas.itemconfig(self.bullet_display, image=self.image_tk)
     def bullet_move(self):
-        self.x_less=0
-        self.x_add=0
-        self.y_less=0
-        self.y_add=0
+        self.rotate_img=self.rotate()
         if self.time==0:
             return
-        if self.mouse_x <= self.image_center_x:
-            self.image_center_x -= self.x_move_step
-            self.x_less+=1
-        elif self.mouse_x >= self.image_center_x:
+        if self.mouse_x < self.image_center_x:
+            self.image_center_x-=self.x_move_step
+        elif self.mouse_x==round(self.image_center_x):
+            self.image_center_x-=self.x_move_step
+        if self.mouse_x > self.image_center_x:
             self.image_center_x += self.x_move_step
-            self.x_add+=1
-        if self.mouse_y <= self.image_center_y:
-            self.image_center_y -= self.y_move_step
-            self.y_less+=1
-        elif self.mouse_y >= self.image_center_y:
+        elif self.mouse_x==round(self.image_center_x):
+            self.image_center_x+=self.x_move_step
+        if self.mouse_y < self.image_center_y:
+            self.image_center_y-=self.y_move_step
+        elif self.mouse_y==round(self.image_center_y):
+            self.image_center_y-=self.y_move_step
+        if self.mouse_y > self.image_center_y:
             self.image_center_y += self.y_move_step
-            self.y_add+=1
-        if self.mouse_x==round(self.image_center_x):
-            if self.x_less!=0:
-                self.image_center_x+=self.x_move_step
-            if self.x_add!=0:
-                self.image_center_x-=self.x_move_step
-        if self.mouse_y==round(self.image_center_y):
-            if self.y_less!=0:
-                self.image_center_y+=self.y_move_step
-            if self.y_add!=0:
-                self.image_center_y-=self.y_move_step
+        elif self.mouse_y==round(self.image_center_y):
+            self.image_center_y+=self.y_move_step
         self.move_img = self.black_canvas.coords(
             self.bullet_display, self.image_center_x, self.image_center_y)
-        self.update = self.root.after(
-            30, self.control_bullet)
     def move_time(self):
         self.buttom_length=abs(self.image_center_x-self.mouse_x)
         self.straight_length=abs(self.image_center_y-self.mouse_y)
@@ -90,6 +83,17 @@ class Bullets:
     def control_bullet(self):
         self.on_mouse_move()
         self.bullet_move()
+        if self.time>0:
+            self.update = self.root.after(30, self.control_bullet)
+        else:
+            self.root.after_cancel(self.update)
+
+
+
+
+
+
+
 
 
 
